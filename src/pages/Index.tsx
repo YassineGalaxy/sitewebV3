@@ -6,14 +6,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
-  ArrowRight, AlertTriangle, FileCheck, Scale, GraduationCap, Award,
-  Leaf, TreePine, Flame, Target, Settings, TrendingUp, Quote, Phone, Mail, MapPin, Lock, ChevronRight,
-  CheckCircle2, Sparkles,
+  ArrowRight, AlertTriangle, FileCheck, Scale,
+  Target, Settings, TrendingUp, Quote, Phone, Mail, MapPin, Lock, ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import LandingHeader from "@/components/shared/LandingHeader";
 import LandingFooter from "@/components/shared/LandingFooter";
-import ServiceDetailSections, { servicesData } from "@/components/landing/ServiceDetailSection";
-import heroBg from "@/assets/hero-bg.jpg";
+import ServiceDetailSections from "@/components/landing/ServiceDetailSection";
+import { HeroCanvas } from "@/components/landing/hero3d";
+import PlanetaryServices from "@/components/landing/PlanetaryServices";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "@/hooks/use-toast";
 
 /* ── Stagger container ── */
@@ -66,14 +68,6 @@ const problems = [
   { icon: Scale, title: "Pression réglementaire", text: "EIE, RSE, audits clients... Les obligations se multiplient, les délais se resserrent." },
 ];
 
-const services = [
-  { icon: GraduationCap, title: "Formation Professionnelle", desc: "Développez les compétences de vos équipes avec notre pédagogie de l'entraînement.", items: ["Formations QHSE sur-mesure", "Ingénierie pédagogique", "+1700 jours délivrés"], badge: "Expertise phare", accent: "from-secondary to-landing-glow", sectionId: "service-formation" },
-  { icon: Award, title: "Conseil & Certification", desc: "Obtenez vos certifications ISO avec un accompagnement de bout en bout.", items: ["ISO 9001, 14001, 45001", "HACCP, FSSC 22000, BRC, IFS", "Audits internes"], badge: "Expertise phare", accent: "from-landing-teal to-landing-blue", sectionId: "service-conseil" },
-  { icon: Leaf, title: "Démarche RSE", desc: "Répondez aux exigences RSE de vos clients internationaux.", items: ["SMETA, BSCI, ICS", "Stratégie RSE"], accent: "from-success to-landing-teal", sectionId: "service-rse" },
-  { icon: TreePine, title: "Études Environnementales", desc: "Acceptabilité environnementale pour vos projets (Loi 12.03).", items: [], accent: "from-landing-blue to-landing-teal", sectionId: "service-etudes" },
-  { icon: Flame, title: "Sécurité Incendie", desc: "Protégez vos installations avec des solutions de prévention sur-mesure.", items: [], accent: "from-destructive to-secondary", sectionId: "service-securite" },
-];
-
 const stats = [
   { value: 1708, suffix: "+", label: "Jours de formation" },
   { value: 246, suffix: "", label: "Jours d'accompagnement" },
@@ -112,6 +106,7 @@ const trustLogos = ["Safran", "Carrefour", "Label'Vie", "Vitogaz", "MC Pharma", 
 
 /* ── Page ── */
 const Index = () => {
+  const isMobile = useIsMobile();
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", need: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -130,128 +125,77 @@ const Index = () => {
     <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
       <LandingHeader />
 
-      {/* ════════════════════════════ HERO ════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center overflow-hidden hero-mesh grain">
-        {/* Floating shapes */}
-        <motion.div
-          className="absolute top-20 right-[10%] w-72 h-72 rounded-full bg-secondary/10 blur-3xl"
-          animate={{ y: [0, -30, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-20 left-[5%] w-96 h-96 rounded-full bg-landing-teal/10 blur-3xl"
-          animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
+      {/* ════════════════════════════ HERO 3D ════════════════════════════ */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* CSS fallback (visible before 3D loads) */}
+        <div className="absolute inset-0 hero-mesh grain -z-10" />
 
-        <div className="relative z-10 container px-6 py-32 lg:py-0">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen pt-[70px]">
-            {/* Text */}
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              animate="show"
-              className="max-w-xl"
-            >
-              <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/15 border border-secondary/20 mb-8">
-                <Sparkles className="w-3.5 h-3.5 text-secondary" />
-                <span className="text-xs font-semibold text-secondary tracking-wide">Depuis 2008 au service de l'excellence</span>
-              </motion.div>
+        {/* 3D Canvas background */}
+        <HeroCanvas isMobile={isMobile} />
 
-              <motion.h1 variants={fadeUp} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] text-primary-foreground mb-6">
-                Formez vos équipes.
-                <br />
-                <span className="bg-gradient-to-r from-secondary to-landing-glow bg-clip-text text-transparent">
-                  Certifiez votre excellence.
-                </span>
-              </motion.h1>
-
-              <motion.p variants={fadeUp} className="text-base sm:text-lg text-primary-foreground/70 mb-10 max-w-lg leading-relaxed">
-                Galaxy Solutions accompagne les entreprises marocaines dans le développement des compétences et l'obtention des certifications ISO, RSE et réglementaires.
-              </motion.p>
-
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4">
-                <Button
-                  size="lg"
-                  onClick={() => scrollTo("#contact")}
-                  className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base px-8 py-6 rounded-xl glow-orange glow-orange-hover transition-all duration-300"
-                >
-                  Diagnostic gratuit
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  onClick={() => scrollTo("#services")}
-                  className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/5 text-base rounded-xl"
-                >
-                  Nos services <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-              </motion.div>
-
-              {/* Mini stats */}
-              <motion.div variants={fadeUp} className="flex items-center gap-8 mt-14 pt-8 border-t border-primary-foreground/10">
-                {[
-                  { val: "1700+", label: "Jours de formation" },
-                  { val: "49", label: "Experts" },
-                  { val: "15+", label: "Ans d'expérience" },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="font-display text-2xl sm:text-3xl font-bold text-secondary">{s.val}</p>
-                    <p className="text-xs text-primary-foreground/50 mt-0.5">{s.label}</p>
-                  </div>
-                ))}
-              </motion.div>
+        {/* Text overlay */}
+        <div className="relative z-10 container px-6 py-32 lg:py-0 w-full">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            className="max-w-2xl min-h-screen flex flex-col justify-center pt-[70px]"
+          >
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/15 border border-secondary/20 mb-8 w-fit">
+              <Sparkles className="w-3.5 h-3.5 text-secondary" />
+              <span className="text-xs font-semibold text-secondary tracking-wide">Depuis 2008 au service de l'excellence</span>
             </motion.div>
 
-            {/* Right side — abstract geometric art */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:flex items-center justify-center relative"
-            >
-              <div className="relative w-[420px] h-[420px]">
-                {/* Orbiting rings */}
-                <motion.div
-                  className="absolute inset-0 rounded-full border border-primary-foreground/10"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div
-                  className="absolute inset-8 rounded-full border border-secondary/20"
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div
-                  className="absolute inset-16 rounded-full border border-primary-foreground/5"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                />
+            <motion.h1 variants={fadeUp} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] text-primary-foreground mb-6">
+              Formez vos équipes.
+              <br />
+              <span className="bg-gradient-to-r from-secondary to-landing-glow bg-clip-text text-transparent">
+                Certifiez votre excellence.
+              </span>
+            </motion.h1>
 
-                {/* Central glow */}
-                <div className="absolute inset-20 rounded-full bg-gradient-to-br from-secondary/30 to-landing-teal/20 blur-2xl" />
+            <motion.p variants={fadeUp} className="text-base sm:text-lg text-primary-foreground/70 mb-10 max-w-lg leading-relaxed">
+              Galaxy Solutions accompagne les entreprises marocaines dans le développement des compétences et l'obtention des certifications ISO, RSE et réglementaires.
+            </motion.p>
 
-                {/* Floating service icons */}
-                {[
-                  { Icon: GraduationCap, x: "10%", y: "15%", delay: 0 },
-                  { Icon: Award, x: "75%", y: "10%", delay: 0.5 },
-                  { Icon: Leaf, x: "85%", y: "60%", delay: 1 },
-                  { Icon: Flame, x: "5%", y: "70%", delay: 1.5 },
-                ].map(({ Icon, x, y, delay }) => (
-                  <motion.div
-                    key={delay}
-                    className="absolute glass w-12 h-12 rounded-xl flex items-center justify-center"
-                    style={{ left: x, top: y }}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 4, delay, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Icon className="w-5 h-5 text-secondary" />
-                  </motion.div>
-                ))}
-              </div>
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4">
+              <Button
+                size="lg"
+                onClick={() => scrollTo("#contact")}
+                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base px-8 py-6 rounded-xl glow-orange glow-orange-hover transition-all duration-300"
+              >
+                Diagnostic gratuit
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="lg"
+                onClick={() => scrollTo("#services")}
+                className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/5 text-base rounded-xl"
+              >
+                Nos services <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
             </motion.div>
-          </div>
+
+            {/* Mini stats */}
+            <motion.div variants={fadeUp} className="flex items-center gap-8 mt-14 pt-8 border-t border-primary-foreground/10">
+              {[
+                { val: "1700+", label: "Jours de formation" },
+                { val: "49", label: "Experts" },
+                { val: "15+", label: "Ans d'expérience" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="font-display text-2xl sm:text-3xl font-bold text-secondary">{s.val}</p>
+                  <p className="text-xs text-primary-foreground/50 mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <ChevronRight className="w-6 h-6 text-primary-foreground/40 rotate-90" />
         </div>
       </section>
 
@@ -329,80 +273,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ════════════════════════════ SERVICES — BENTO ════════════════════════════ */}
-      <section id="services" className="py-24 bg-landing-alt relative">
-        <div className="container px-6">
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="text-center mb-16"
-          >
-            <motion.p variants={fadeUp} className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary mb-3">Nos expertises</motion.p>
-            <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Formation & Conseil
-            </motion.h2>
-            <motion.p variants={fadeUp} className="text-muted-foreground max-w-xl mx-auto">
-              Des solutions concrètes pour développer vos compétences et atteindre vos objectifs QHSE.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.1 }}
-            className="bento-services grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-          >
-            {services.map((s, i) => (
-              <motion.div
-                key={s.title}
-                variants={scaleIn}
-                className={`group relative p-7 rounded-2xl bg-card border border-border hover:border-secondary/20 transition-all duration-500 tilt-card overflow-hidden ${
-                  i === 0 ? "lg:col-span-2" : ""
-                } ${i === 1 ? "lg:row-span-2" : ""}`}
-              >
-                {/* Gradient accent line */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${s.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-t-2xl`} />
-
-                {s.badge && (
-                  <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider bg-secondary/10 text-secondary px-3 py-1 rounded-full mb-4">
-                    <Sparkles className="w-3 h-3" />
-                    {s.badge}
-                  </span>
-                )}
-
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/15 to-transparent flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                  <s.icon className="w-6 h-6 text-secondary" />
-                </div>
-
-                <h3 className="font-display font-semibold text-lg text-foreground mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{s.desc}</p>
-
-                {s.items.length > 0 && (
-                  <ul className="space-y-2 mb-5">
-                    {s.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2.5 text-sm text-foreground">
-                        <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <button
-                  onClick={() => scrollTo(`#${s.sectionId}`)}
-                  className="text-sm font-medium text-secondary hover:text-secondary/80 inline-flex items-center gap-1.5 group/link"
-                >
-                  En savoir plus
-                  <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                </button>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      {/* ════════════════════════════ SERVICES — PLANETARY ════════════════════════════ */}
+      <PlanetaryServices />
 
       {/* ════════════════════════════ SERVICE DETAILS ════════════════════════════ */}
       <ServiceDetailSections />
