@@ -141,52 +141,59 @@ const Index = () => {
             animate="show"
             className="max-w-2xl min-h-screen flex flex-col justify-center pt-[70px]"
           >
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/15 border border-secondary/20 mb-8 w-fit">
-              <Sparkles className="w-3.5 h-3.5 text-secondary" />
-              <span className="text-xs font-semibold text-secondary tracking-wide">Depuis 2008 au service de l'excellence</span>
+            {/* Badge */}
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/10 border border-white/20 w-fit">
+              <Sparkles className="w-4 h-4 text-secondary" />
+              <span className="text-sm font-medium text-white/80">Études · Conseil · Formation depuis 2008</span>
             </motion.div>
 
-            <motion.h1 variants={fadeUp} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] text-primary-foreground mb-6">
-              Formez vos équipes.
-              <br />
-              <span className="bg-gradient-to-r from-secondary to-landing-glow bg-clip-text text-transparent">
-                Certifiez votre excellence.
-              </span>
+            {/* Titre principal */}
+            <motion.h1 variants={fadeUp} className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-white">
+              Galaxy{" "}
+              <span className="text-secondary">Solutions</span>
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="text-base sm:text-lg text-primary-foreground/70 mb-10 max-w-lg leading-relaxed">
-              Galaxy Solutions accompagne les entreprises marocaines dans le développement des compétences et l'obtention des certifications ISO, RSE et réglementaires.
+            {/* Tagline */}
+            <motion.p variants={fadeUp} className="mt-4 font-display text-xl sm:text-2xl text-secondary font-medium">
+              Votre univers de compétences
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4">
+            {/* Sous-titre */}
+            <motion.p variants={fadeUp} className="mt-4 text-lg text-white/60 max-w-xl leading-relaxed">
+              Nous accompagnons les entreprises marocaines dans la montée en compétences, la certification et la conformité réglementaire depuis plus de 15 ans.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div variants={fadeUp} className="mt-10 flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
+                className="bg-secondary hover:bg-secondary/90 text-white font-semibold rounded-full px-8 glow-orange"
                 onClick={() => scrollTo("#contact")}
-                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base px-8 py-6 rounded-xl glow-orange glow-orange-hover transition-all duration-300"
               >
-                Diagnostic gratuit
-                <ArrowRight className="w-5 h-5 ml-2" />
+                Nous contacter
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
               <Button
-                variant="ghost"
                 size="lg"
+                variant="outline"
+                className="rounded-full px-8 border-white/20 text-white hover:bg-white/10"
                 onClick={() => scrollTo("#services")}
-                className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/5 text-base rounded-xl"
               >
-                Nos services <ChevronRight className="w-4 h-4 ml-1" />
+                Découvrir nos services
               </Button>
             </motion.div>
 
-            {/* Mini stats */}
-            <motion.div variants={fadeUp} className="flex items-center gap-8 mt-14 pt-8 border-t border-primary-foreground/10">
+            {/* Mini-stats */}
+            <motion.div variants={fadeUp} className="mt-14 flex gap-10">
               {[
-                { val: "1700+", label: "Jours de formation" },
-                { val: "49", label: "Experts" },
-                { val: "15+", label: "Ans d'expérience" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="font-display text-2xl sm:text-3xl font-bold text-secondary">{s.val}</p>
-                  <p className="text-xs text-primary-foreground/50 mt-0.5">{s.label}</p>
+                { value: "1708+", label: "Jours de formation" },
+                { value: "49", label: "Experts & Consultants" },
+                { value: "57", label: "Études réalisées" },
+                { value: "246+", label: "Jours d'accompagnement" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-display text-2xl font-bold text-secondary">{stat.value}</div>
+                  <div className="text-xs text-white/40 mt-1">{stat.label}</div>
                 </div>
               ))}
             </motion.div>
