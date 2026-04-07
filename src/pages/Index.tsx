@@ -127,8 +127,8 @@ const Index = () => {
 
       {/* ════════════════════════════ HERO 3D ════════════════════════════ */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* CSS fallback (visible before 3D loads) */}
-        <div className="absolute inset-0 hero-mesh grain -z-10" />
+        {/* CSS fallback (visible before 3D loads) + dark base for the hero */}
+        <div className="absolute inset-0 hero-mesh grain" />
 
         {/* 3D Canvas background */}
         <HeroCanvas isMobile={isMobile} />

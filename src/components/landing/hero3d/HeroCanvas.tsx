@@ -10,7 +10,7 @@ interface HeroCanvasProps {
 
 export default function HeroCanvas({ isMobile }: HeroCanvasProps) {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 z-[1]">
       <Canvas
         camera={{ position: [0, 2, 8], fov: 60, near: 0.1, far: 100 }}
         style={{ background: 'transparent' }}

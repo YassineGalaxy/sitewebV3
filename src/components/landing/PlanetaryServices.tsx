@@ -52,16 +52,16 @@ function ServicePlanet({
       </mesh>
       <mesh scale={hovered ? 1.5 : 1}>
         <sphereGeometry args={[0.7, 24, 24]} />
-        <meshBasicMaterial color={service.color} transparent opacity={hovered ? 0.25 : 0.1} />
+        <meshBasicMaterial color={service.color} transparent opacity={hovered ? 0.25 : 0.15} />
       </mesh>
       <Html center distanceFactor={10} position={[0, 0.9, 0]} style={{ pointerEvents: 'none', whiteSpace: 'nowrap' }}>
         <span
-          className="font-display select-none transition-all duration-300"
+          className="font-display font-semibold select-none transition-all duration-300"
           style={{
-            color: '#fff',
+            color: 'hsl(213, 52%, 24%)',
             opacity: hovered ? 1 : 0.8,
             fontSize: hovered ? '14px' : '12px',
-            textShadow: '0 0 10px rgba(0,0,0,0.8)',
+            textShadow: '0 0 8px rgba(255,255,255,0.8)',
           }}
         >
           {service.name}
@@ -76,7 +76,7 @@ function PlanetaryScene({ onSelect }: { onSelect: (id: string) => void }) {
   const orbitRef = useRef<THREE.Group>(null);
 
   const lineData = useMemo(() => {
-    const material = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.1 });
+    const material = new THREE.LineBasicMaterial({ color: '#1a2332', transparent: true, opacity: 0.15 });
     return SERVICES.map((_, i) => {
       const angle = (i / SERVICES.length) * Math.PI * 2;
       const x = ORBIT_RADIUS_X * Math.cos(angle);
@@ -97,20 +97,20 @@ function PlanetaryScene({ onSelect }: { onSelect: (id: string) => void }) {
 
   return (
     <>
-      {/* Core */}
+      {/* Core — more visible on light bg */}
       <mesh>
         <sphereGeometry args={[0.5, 32, 32]} />
-        <meshBasicMaterial color="#e08a38" transparent opacity={0.3} />
+        <meshBasicMaterial color="#e08a38" transparent opacity={0.5} />
       </mesh>
       <mesh>
         <sphereGeometry args={[0.8, 32, 32]} />
-        <meshBasicMaterial color="#e08a38" transparent opacity={0.08} side={THREE.BackSide} />
+        <meshBasicMaterial color="#e08a38" transparent opacity={0.12} side={THREE.BackSide} />
       </mesh>
 
-      {/* Orbital ring */}
+      {/* Orbital ring — navy on light bg */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[4.5, 0.005, 8, 100]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.06} />
+        <torusGeometry args={[4.5, 0.008, 8, 100]} />
+        <meshBasicMaterial color="#1a2332" transparent opacity={0.1} />
       </mesh>
 
       {/* Planets + lines */}
@@ -204,17 +204,19 @@ export default function PlanetaryServices() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.3 }}
-        className="w-full h-[550px]"
+        className="w-full"
       >
-        <Canvas
-          camera={{ position: [0, 2, 9], fov: 60, near: 0.1, far: 100 }}
-          style={{ background: 'transparent' }}
-          dpr={Math.min(window.devicePixelRatio, 2)}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-          onPointerMissed={() => {}}
-        >
-          <PlanetaryScene onSelect={handleSelect} />
-        </Canvas>
+        <div style={{ height: '550px', width: '100%' }}>
+          <Canvas
+            camera={{ position: [0, 2, 9], fov: 60, near: 0.1, far: 100 }}
+            style={{ background: 'transparent' }}
+            dpr={Math.min(window.devicePixelRatio, 2)}
+            gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+            onPointerMissed={() => {}}
+          >
+            <PlanetaryScene onSelect={handleSelect} />
+          </Canvas>
+        </div>
       </motion.div>
     </section>
   );
